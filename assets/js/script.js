@@ -86,14 +86,14 @@ get_forcast_weather_data = function(lat, lon, city_name){
 
             .then(function(data){
                 let information = data.list
-                for (let i = 7; i < information.length; i+=8){
+                for (let i = 5; i < information.length; i+=8){
                     let date = information[i].dt_txt.split(" ")[0];
                     let temp = information[i].main.temp;
                     let wind = information[i].wind.speed;
                     let humidity = information[i].main.humidity;
                     let icon_description = information[i].weather[0].main;
                     
-                    let index = (i-7)/8
+                    let index = (i-5)/8
                     $(`.card-date-${index}`).text(date);
                     $(`.card-temp-${index}`).text(`Temp: ${temp}°F`);
                     $(`.card-wind-${index}`).text(`Wind: ${wind} MPH`);
@@ -142,6 +142,13 @@ get_city_coordinates = function(city){
                 
                 get_current_weather_data(lat,lon,city_name)
                 get_forcast_weather_data(lat,lon,city_name)
+
+                // check if input city is included in localstorage
+                let is_in_local = Object.keys(JSON.parse(localStorage.getItem("city_info"))).includes(city_name)
+                if(!is_in_local){
+                    search_history.append(`<li class="list-group-item" data-city="${city_name}">${city_name}</li>`);
+                }
+                
             })
         }
         else{
@@ -151,17 +158,36 @@ get_city_coordinates = function(city){
 }
 
 
+display_history = function(){
+    let history = JSON.parse(localStorage.getItem("city_info"))
+    
+    if(history){
+        let city_history_list = Object.keys(history)
+        for(let i = 0; i < city_history_list.length; i++){
+            let city_local_name = city_history_list[i]
+            search_history.append(`<li class="list-group-item" data-city="${city_local_name}">${city_local_name}`)
+        }
+
+    }
+    else{
+        alert("no history");
+    }
+
+}
+
 search_handler = function(){
-    let city = search_element.val()
+    let city = search_element.val().trim();
     
     if(city){
-        search_history.append(`<li class="list-group-item">${city}</li>`);
-        
-
-        get_city_coordinates(city)
-    }
+        get_city_coordinates(city);
+    };
 
     
 }
 
+display_history();
+
 search_button.on("click",search_handler);
+search_history.on("click","li",function(){
+    
+});
