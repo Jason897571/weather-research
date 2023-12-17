@@ -42,7 +42,7 @@ get_current_weather_data = function(lat,lon,city_name){
                 let temp = data.main.temp;
                 let wind = data.wind.speed;
                 let humidity = data.main.humidity;
-                let icon_description = data.weather[0].icon;
+                let icon_description = data.weather[0].main;
 
                 if(icon_description == "Clear"){
                     current_icon.attr("src", "./assets/img/sun.png");
@@ -60,12 +60,9 @@ get_current_weather_data = function(lat,lon,city_name){
                 temp_element.text(`Temperature: ${temp} °F`);
                 wind_element.text(`Wind Speed: ${wind}` + " MPH");
                 humidity_element.text(`Humidity: ${humidity}%`);
-                city_info["current_temp"] = temp;
-                city_info["current_wind"] = wind;
-                city_info["current_humidity"] = humidity;
-
-                // save data to localstorage
                 
+                city_info[`${city_name}`] = {"current":{"date":current_date,"icon":icon_description,"current_temp":temp, "current_wind":wind, "current_humidity":humidity}};
+
 
             })
 
@@ -96,22 +93,31 @@ get_forcast_weather_data = function(lat, lon, city_name){
                     let humidity = information[i].main.humidity;
                     let icon_description = information[i].weather[0].main;
                     
-                    $(`.card-date-${(i-7)/8}`).text(date);
-                    $(`.card-temp-${(i-7)/8}`).text(`Temp: ${temp}°F`);
-                    $(`.card-wind-${(i-7)/8}`).text(`Wind: ${wind} MPH`);
-                    $(`.card-humidity-${(i-7)/8}`).text(`Humidity: ${humidity}%`);
+                    let index = (i-7)/8
+                    $(`.card-date-${index}`).text(date);
+                    $(`.card-temp-${index}`).text(`Temp: ${temp}°F`);
+                    $(`.card-wind-${index}`).text(`Wind: ${wind} MPH`);
+                    $(`.card-humidity-${index}`).text(`Humidity: ${humidity}%`);
 
                     if(icon_description == "Clear"){
-                        $(`.card-icon-${(i-7)/8}`).attr("src", "./assets/img/sun.png");
+                        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
                     }else if(icon_description == "Clouds"){
-                        $(`.card-icon-${(i-7)/8}`).attr("src", "./assets/img/cloud.png");
+                        $(`.card-icon-${index}`).attr("src", "./assets/img/cloud.png");
                     }else if(icon_description == "Rain"){
-                        $(`.card-icon-${(i-7)/8}`).attr("src", "./assets/img/rain.png");
+                        $(`.card-icon-${index}`).attr("src", "./assets/img/rain.png");
                     }else{
-                        $(`.card-icon-${(i-7)/8}`).attr("src", "./assets/img/sun.png");
+                        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
                     }
- 
-                    
+
+
+
+                    city_info[`${city_name}`][`forcast-${index}`] = {"date":date,"icon":icon_description,"current_temp":temp, "current_wind":wind, "current_humidity":humidity};
+                
+                
+                // save data to localstorage
+                localStorage.setItem("city_info", JSON.stringify(city_info));
+                  
+                
             }})
 
         }else{
@@ -150,6 +156,7 @@ search_handler = function(){
     
     if(city){
         search_history.append(`<li class="list-group-item">${city}</li>`);
+        
 
         get_city_coordinates(city)
     }
