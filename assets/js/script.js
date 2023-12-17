@@ -28,7 +28,23 @@ for (let i = 0; i < 5; i++) {
 }
 
 
+display_current_weather = function(date,city_name,icon_description,temp,wind,humidity){
+    if(icon_description == "Clear"){
+        current_icon.attr("src", "./assets/img/sun.png");
+    }else if(icon_description == "Clouds"){
+        current_icon.attr("src", "./assets/img/cloud.png");
+    }else if(icon_description == "Rain"){
+        current_icon.attr("src", "./assets/img/rain.png");
+    }else{
+        current_icon.attr("src", "./assets/img/sun.png");
+    }
 
+    
+    city_name_element.text(city_name + "(" + date+")");
+    temp_element.text(`Temperature: ${temp} °F`);
+    wind_element.text(`Wind Speed: ${wind}` + " MPH");
+    humidity_element.text(`Humidity: ${humidity}%`);
+}
 
 get_current_weather_data = function(lat,lon,city_name){
     let current_weather_api_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${my_api_key}`
@@ -44,22 +60,7 @@ get_current_weather_data = function(lat,lon,city_name){
                 let humidity = data.main.humidity;
                 let icon_description = data.weather[0].main;
 
-                if(icon_description == "Clear"){
-                    current_icon.attr("src", "./assets/img/sun.png");
-                }else if(icon_description == "Clouds"){
-                    current_icon.attr("src", "./assets/img/cloud.png");
-                }else if(icon_description == "Rain"){
-                    current_icon.attr("src", "./assets/img/rain.png");
-                }else{
-                    current_icon.attr("src", "./assets/img/sun.png");
-                }
-
-
-                
-                city_name_element.text(city_name + "(" + current_date+")");
-                temp_element.text(`Temperature: ${temp} °F`);
-                wind_element.text(`Wind Speed: ${wind}` + " MPH");
-                humidity_element.text(`Humidity: ${humidity}%`);
+                display_current_weather(current_date,city_name,temp,wind,humidity,icon_description);
                 
                 city_info[`${city_name}`] = {"current":{"date":current_date,"icon":icon_description,"current_temp":temp, "current_wind":wind, "current_humidity":humidity}};
 
@@ -74,6 +75,22 @@ get_current_weather_data = function(lat,lon,city_name){
 }
 
 
+display_forcast_weather = function(index,date,temp,wind,humidity,icon_description){
+    $(`.card-date-${index}`).text(date);
+    $(`.card-temp-${index}`).text(`Temp: ${temp}°F`);
+    $(`.card-wind-${index}`).text(`Wind: ${wind} MPH`);
+    $(`.card-humidity-${index}`).text(`Humidity: ${humidity}%`);
+
+    if(icon_description == "Clear"){
+        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
+    }else if(icon_description == "Clouds"){
+        $(`.card-icon-${index}`).attr("src", "./assets/img/cloud.png");
+    }else if(icon_description == "Rain"){
+        $(`.card-icon-${index}`).attr("src", "./assets/img/rain.png");
+    }else{
+        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
+    }
+}
 
 get_forcast_weather_data = function(lat, lon, city_name){
 
@@ -86,32 +103,19 @@ get_forcast_weather_data = function(lat, lon, city_name){
 
             .then(function(data){
                 let information = data.list
-                for (let i = 5; i < information.length; i+=8){
+                for (let i = 4; i < information.length; i+=8){
                     let date = information[i].dt_txt.split(" ")[0];
                     let temp = information[i].main.temp;
                     let wind = information[i].wind.speed;
                     let humidity = information[i].main.humidity;
                     let icon_description = information[i].weather[0].main;
                     
-                    let index = (i-5)/8
-                    $(`.card-date-${index}`).text(date);
-                    $(`.card-temp-${index}`).text(`Temp: ${temp}°F`);
-                    $(`.card-wind-${index}`).text(`Wind: ${wind} MPH`);
-                    $(`.card-humidity-${index}`).text(`Humidity: ${humidity}%`);
-
-                    if(icon_description == "Clear"){
-                        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
-                    }else if(icon_description == "Clouds"){
-                        $(`.card-icon-${index}`).attr("src", "./assets/img/cloud.png");
-                    }else if(icon_description == "Rain"){
-                        $(`.card-icon-${index}`).attr("src", "./assets/img/rain.png");
-                    }else{
-                        $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
-                    }
+                    let index = (i-4)/8
+                   
+                    display_forcast_weather(index, date, icon_description, temp, wind, humidity, city_name)
 
 
-
-                    city_info[`${city_name}`][`forcast-${index}`] = {"date":date,"icon":icon_description,"current_temp":temp, "current_wind":wind, "current_humidity":humidity};
+                    city_info[`${city_name}`][`forcast-${index}`] = {"date":date,"icon":icon_description,"forcast_temp":temp, "forcast_wind":wind, "forcast_humidity":humidity};
                 
                 
                 // save data to localstorage
@@ -188,6 +192,35 @@ search_handler = function(){
 display_history();
 
 search_button.on("click",search_handler);
-search_history.on("click","li",function(){
+// when click history city
+search_history.on("click","li",function(event){
+    let target = event.target;
+    let city_name = target.dataset.city;
+    let local_info = JSON.parse(localStorage.getItem("city_info"))
+    let local_city_list = Object.keys(local_info)
+    if(local_city_list.includes(city_name)){
+        let city_data = local_info[city_name]
+
+        // render current weather page for selected city
+        let current_date = city_data.current.date
+        let current_temp = city_data.current.temp
+        let current_humidity = city_data.current.humidity
+        let current_wind = city_data.current.wind
+        let current_icon_discription = city_data.current.icon
+        display_current_weather(current_date,city_name,current_icon_discription,current_temp,current_wind,current_humidity)
+        
+        // render forcast weather page for selected city
+        for(let i = 0; i < 5; i++){
+            let forcast_date = city_data[`forcast-${i}`].date;
+            let forcast_temp = city_data[`forcast-${i}`].temp;
+            let forcast_wind = city_data[`forcast-${i}`].wind;
+            let forcast_humidity = city_data[`forcast-${i}`].humidity;
+            let forcast_icon_description = city_data[`forcast-${i}`].icon;
+            display_forcast_weather(i,forcast_date,forcast_temp,forcast_wind,forcast_humidity,forcast_icon_description)
+ 
+        }
+    }
+
+
     
 });
