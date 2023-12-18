@@ -1,6 +1,7 @@
 let search_element = $("#city-search");
 let search_button = $("#search-button");
 let search_history = $(".search-history");
+let all_result_holder = $(".all-result");
 let city_name_element = $(".city-name");
 let current_icon = $(".current-icon");
 let temp_element = $(".temp");
@@ -195,7 +196,7 @@ get_city_coordinates = function (city) {
         
         // check if input city is included in localstorage and create history element
         let history = JSON.parse(localStorage.getItem("city_info"));
-        
+
         if (history) {
             let is_in_local = Object.keys(history).includes(city_name);
             if (!is_in_local) {
@@ -214,6 +215,7 @@ get_city_coordinates = function (city) {
 
         get_current_weather_data(lat, lon, city_name);
         get_forcast_weather_data(lat, lon, city_name);
+        all_result_holder.removeClass("hidden");
 
         
       });
@@ -238,6 +240,7 @@ display_history = function () {
 };
 
 search_handler = function () {
+
   let city = search_element.val().trim();
 
   if (city) {
@@ -252,10 +255,14 @@ search_button.on("click", search_handler);
 
 // when click history city
 search_history.on("click", "li", function (event) {
+
   let target = event.target;
   let city_name = target.dataset.city;
   let local_info = JSON.parse(localStorage.getItem("city_info"));
   let local_city_list = Object.keys(local_info);
+
+  all_result_holder.removeClass("hidden");
+  
   if (local_city_list.includes(city_name)) {
     let city_data = local_info[city_name];
 
@@ -296,3 +303,4 @@ search_history.on("click", "li", function (event) {
     }
   }
 });
+

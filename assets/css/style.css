@@ -12,5 +12,28 @@ li{
     list-style: none;
 }
 
+.current-result{
+    border: 2px solid rgb(10, 0, 0);
+}
+
+.card-body{
+    background-color: gray;
+    height: 200px;
+    color:white;
+    margin: 10px;
+    
+}
+
+.hidden{
+    display: none;
+}
+
+#city-search,
+#search-button{
+    display: block;
+    width: 100%;
+    margin-top:10px;
+    
+}
 
 
