@@ -43,8 +43,6 @@ display_current_weather = function (
 ) {
   
   current_icon.attr("src", `https://openweathermap.org/img/wn/${icon_description}@2x.png`);
-
-
   city_name_element.text(city_name + "(" + date + ")");
   temp_element.text(`Temperature: ${temp} °F`);
   wind_element.text(`Wind Speed: ${wind}` + " MPH");
@@ -74,8 +72,7 @@ get_current_weather_data = function (lat, lon, city_name) {
 
   fetch(current_weather_api_url).then(function (response) {
     if (response.status == 200) {
-      return response
-        .json()
+      return response.json()
 
         .then(function (data) {
           let temp = data.main.temp;
@@ -176,7 +173,9 @@ get_city_coordinates = function (city) {
   // get latitude and longitude by city name
   fetch(coordinates_api_url).then(function (response) {
     if (response.status == 200) {
-      return response.json().then(function (data) {
+      return response.json()
+      
+      .then(function (data) {
 
         // if the returned data is not empty,the length of the data should not be 0
         if(data.length!==0){
