@@ -1,10 +1,16 @@
+
+
 header{
     background-color: rgb(64, 22, 180);
     color:azure
 }
 
+body{
+    background-color: rgb(222, 222, 157);
+}
+
 img{
-    width: 20px;
+    width: 40px;
     
 }
 
@@ -14,15 +20,23 @@ li{
 
 .current-result{
     border: 2px solid rgb(10, 0, 0);
+    border-radius: 10px;
 }
 
 .card-body{
-    background-color: gray;
-    height: 200px;
+    background-color: grey;
+    height: 300px;
     color:white;
     margin: 10px;
+    border-radius: 10px;
     
 }
+
+.list-group-item:hover{
+    background-color: lightblue;
+    cursor: pointer;
+}
+
 
 .hidden{
     display: none;

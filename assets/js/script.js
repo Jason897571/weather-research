@@ -41,15 +41,9 @@ display_current_weather = function (
   wind,
   humidity
 ) {
-  if (icon_description == "Clear") {
-    current_icon.attr("src", "./assets/img/sun.png");
-  } else if (icon_description == "Clouds") {
-    current_icon.attr("src", "./assets/img/cloud.png");
-  } else if (icon_description == "Rain") {
-    current_icon.attr("src", "./assets/img/rain.png");
-  } else {
-    current_icon.attr("src", "./assets/img/sun.png");
-  }
+  
+  current_icon.attr("src", `https://openweathermap.org/img/wn/${icon_description}@2x.png`);
+
 
   city_name_element.text(city_name + "(" + date + ")");
   temp_element.text(`Temperature: ${temp} °F`);
@@ -70,17 +64,10 @@ display_forcast_weather = function (
     $(`.card-wind-${index}`).text(`Wind: ${wind} MPH`);
     $(`.card-humidity-${index}`).text(`Humidity: ${humidity}%`);
   
-    if (icon_description == "Clear") {
-      $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
-    } else if (icon_description == "Clouds") {
-      $(`.card-icon-${index}`).attr("src", "./assets/img/cloud.png");
-    } else if (icon_description == "Rain") {
-      $(`.card-icon-${index}`).attr("src", "./assets/img/rain.png");
-    } else {
-      $(`.card-icon-${index}`).attr("src", "./assets/img/sun.png");
-    }
-    $(`.card-icon-${index}`).addClass("mx-auto d-block")
-  };
+    
+    $(`.card-icon-${index}`).attr("src",`https://openweathermap.org/img/wn/${icon_description}@2x.png`);
+  }
+
 
 get_current_weather_data = function (lat, lon, city_name) {
   let current_weather_api_url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${my_api_key}`;
@@ -94,7 +81,7 @@ get_current_weather_data = function (lat, lon, city_name) {
           let temp = data.main.temp;
           let wind = data.wind.speed;
           let humidity = data.main.humidity;
-          let icon_description = data.weather[0].main;
+          let icon_description = data.weather[0].icon;
 
           //date,city_name,icon_description,temp,wind,humidity
           display_current_weather(
@@ -139,7 +126,7 @@ get_forcast_weather_data = function (lat, lon, city_name) {
             let temp = information[i].main.temp;
             let wind = information[i].wind.speed;
             let humidity = information[i].main.humidity;
-            let icon_description = information[i].weather[0].main;
+            let icon_description = information[i].weather[0].icon;
 
             let index = (i - 4) / 8;
 
@@ -188,39 +175,41 @@ get_city_coordinates = function (city) {
   let coordinates_api_url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=${my_api_key}`;
   // get latitude and longitude by city name
   fetch(coordinates_api_url).then(function (response) {
-    if (response.ok) {
+    if (response.status == 200) {
       return response.json().then(function (data) {
-        let lat = data[0]["lat"]; //latitude
-        let lon = data[0]["lon"]; //longitude
-        let city_name = data[0]["name"]; // city name
-        
-        // check if input city is included in localstorage and create history element
-        let history = JSON.parse(localStorage.getItem("city_info"));
 
-        if (history) {
-            let is_in_local = Object.keys(history).includes(city_name);
-            if (!is_in_local) {
-            search_history.append(
-                `<li class="list-group-item" data-city="${city_name}">${city_name}</li>`
-            );}
+        // if the returned data is not empty,the length of the data should not be 0
+        if(data.length!==0){
+          let lat = data[0]["lat"]; //latitude
+          let lon = data[0]["lon"]; //longitude
+          let city_name = data[0]["name"]; // city name
+          
+          // check if input city is included in localstorage and create history element
+          let history = JSON.parse(localStorage.getItem("city_info"));
+  
+          if (history) {
+              let is_in_local = Object.keys(history).includes(city_name);
+              if (!is_in_local) {
+              search_history.append(
+                  `<li class="list-group-item" data-city="${city_name}">${city_name}</li>`
+              );}
+          }
+          else{
+              search_history.append(
+                  `<li class="list-group-item" data-city="${city_name}">${city_name}</li>`);
+          }
+  
+          get_current_weather_data(lat, lon, city_name);
+          get_forcast_weather_data(lat, lon, city_name);
+          all_result_holder.removeClass("hidden");
         }
         else{
-            search_history.append(
-                `<li class="list-group-item" data-city="${city_name}">${city_name}</li>`);
+          alert("Your input is invalid, please try again")
         }
 
-        
-
-        
-
-        get_current_weather_data(lat, lon, city_name);
-        get_forcast_weather_data(lat, lon, city_name);
-        all_result_holder.removeClass("hidden");
-
-        
       });
     } else {
-      alert("error" + response.statusText);
+      alert("error " + response.status);
     }
   });
 };
