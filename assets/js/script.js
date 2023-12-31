@@ -169,7 +169,7 @@ get_forcast_weather_data = function (lat, lon, city_name) {
 
 get_city_coordinates = function (city) {
   let limit = 1;
-  let coordinates_api_url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=${my_api_key}`;
+  let coordinates_api_url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=${limit}&appid=${my_api_key}`;
   // get latitude and longitude by city name
   fetch(coordinates_api_url).then(function (response) {
     if (response.status == 200) {
