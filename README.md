@@ -51,11 +51,11 @@
 
 <p><strong>Start Page</strong></p>
 
-![Alt text](./Assets/image/cover.png)
+![Alt text](./assets/img/start.png)
 
 <br />
 
-This is a time manager that allows you to track your time spent on projects and tasks.
+The web is used to search the weather for any cities all over the world. It includes current weather and 5-day forcasting weather. 
 
 
 
@@ -63,11 +63,11 @@ This is a time manager that allows you to track your time spent on projects and 
 <a id="#built-with"></a>
 ## Built with
 This Quiz is built with HTML, CSS and Javascript.
-* [![Alt text](./Assets/image/html.png)][HTML-url]
-* [![Alt text](./Assets/image/css.png)][CSS-url]
-* [![Alt text](./Assets/image/javascript.png)][Javascript-url]
-* [![Alt text](./Assets/image/Bootstrap.png)][BootStrap-url]
-* [![Alt text](./Assets/image/jQuery.png)][jQuery-url]
+* [![Alt text](./assets/img/html.png)][HTML-url]
+* [![Alt text](./assets/img/css.png)][CSS-url]
+* [![Alt text](./assets/img/javascript.png)][Javascript-url]
+* [![Alt text](./assets/img/Bootstrap.png)][BootStrap-url]
+* [![Alt text](./assets/img/jQuery.png)][jQuery-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -84,10 +84,10 @@ You should have your shell ready for downloading this project. We use gitbash as
 
 <a id="installation"></a>
 ### Installation
-1. Get a free API Key at [github](https://github.com/Jason897571/raccoon-time-manager#built-with)
+1. Get a free API Key at [github](https://github.com/Jason897571/weather-research#built-with)
 2. Clone the repo
    ```sh
-   git clone https://github.com/Jason897571/raccoon-time-manager.git
+   git clone https://github.com/Jason897571/weather-research.git
    ```
 3. Open the project using vs code and run it in browser
 
@@ -102,25 +102,15 @@ When you open the project in your browser, you will see the following page.
 
 
 
-![Alt text](./Assets/image/cover.png)
+![Alt text](./assets/img/start.png)
 
-When you input your plan in the textarea, you can save it by clicking the save button in the right. After clicking it, you will see a window poping up to confirm that you have update your schedule.
-However, if your input is None or you delete your schedule, you will see a popup window to remind you that you have removed your schedule.
+When you search the weather  in the search bar, the results will be shown in the right and the data will store in history tab below.
 
-<p><strong>Save Data</strong></p>
+<p><strong>Example</strong></p>
 
-![Alt text](./Assets/image/input.png)
-![Alt text](./Assets/image/popup.png)
-![Alt text](./Assets/image/nothing.png)
+When Boston is input in the search bar, the following results will be shown. It includes the current weather and 5-day forcasting weather for Boston. In the meantime, the data will be stored in history tab below. Whenever you would like to retrive the historical data, you can click the corresponding date in the history tab.
 
-By choosing the date from datepicker, you can switch date to the past or future and you can add or remove your schedule in different date as well.
-
-
-
-<p><strong>Switching Date </strong></p> 
-
-![Alt text](./Assets/image/past.png)
-![Alt text](./Assets/image/future.png)
+![Alt text](./assets/img/example.png)
 
 For more details, please refer to the [Documentation](https://github.com/Jason897571/weather-research)
 
@@ -129,11 +119,9 @@ For more details, please refer to the [Documentation](https://github.com/Jason89
 
 <a id="future_additions"></a>
 ## Future Additions
-* Add login in and register system for user to register or log in
-* A timer may added for event track
-* Creating dragable feature for the schedule so that the user can drag the schedule to the right place
-* Creating different sections for different users, such as shopping list.
-* Creating feature to arrange events in difficilty.
+* Adding google map api to the web
+* optimizing the searching function to auto-fill the city name
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -144,7 +132,7 @@ For more details, please refer to the [Documentation](https://github.com/Jason89
 
 Jason Gu - [Email](king.gs1314@outlook.com) - king.gs1314@outlook.com
 
-Project Link: [https://github.com/Jason897571/raccoon-time-manager](https://github.com/Jason897571/weather-research)
+Project Link: [https://github.com/Jason897571/weather-research](https://github.com/Jason897571/weather-research)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
